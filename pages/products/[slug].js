@@ -1,9 +1,15 @@
 import { React, useState } from 'react'
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import Error from 'next/error';
 import connectdb from '../../middleware/dbConection';
 import Product from '../../models/product';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { TbRoute } from 'react-icons/tb';
 
-const Slug = ({ addToCart, productItem }) => {
+
+const Slug = ({ addToCart, productItem, cart, error }) => {
 
   let router = useRouter();
   const { slug } = router.query;
@@ -14,26 +20,50 @@ const Slug = ({ addToCart, productItem }) => {
     setPincode(e.target.value);
   }
 
+  const handleBuyNow = () => {
+    addToCart(slug, 1, productItem.price, productItem.title, productItem.description,productItem.availableQty);
+    router.push('/checkout')
+  }
+
+
   const checkPinCode = async () => {
-    let response = await fetch('http://localhost:3000/api/pincode');
+    let response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pincode`);
     let pincodes = await response.json();
-    console.log(pincodes);
     console.log(pincode);
     if (pincodes.includes(parseInt(pincode))) {
       setService(true);
+      toast.success('This pincode is servicable');
     } else {
       setService(false)
+      toast.error('This pincode is not servicable');
     }
 
   }
 
+  if (error) {
+    return <Error statusCode={404} />
+  }
 
   return (
     <>
+     <ToastContainer
+      position="top-center"
+      theme="dark"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
       <section className="text-gray-600 body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto">
           <div className="lg:w-4/5 mx-auto flex flex-wrap">
-            <img alt="ecommerce" className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded border-2 " src={`${productItem.image}`} />
+            <div className='lg:w-1/2 w-full lg:h-auto h-64 rounded border-2'>
+              <Image width={1000} height={1000} alt="ecommerce" className=" object-cover object-center" src={`${productItem.image}`} />
+            </div>
             <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
               <h2 className="text-sm title-font text-gray-500 tracking-widest">Buyceps.com</h2>
               <h1 className="text-pink-400 text-3xl title-font font-medium mb-1">{productItem.title}</h1>
@@ -85,8 +115,8 @@ const Slug = ({ addToCart, productItem }) => {
               </div>
               <div className="flex">
                 <span className="title-font font-medium text-2xl text-gray-900">₹{productItem.price}</span>
-                <button className="flex ml-2 md:ml-4 text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">Buy now</button>
-                <button onClick={() => { addToCart(slug, 1, productItem.price,productItem.title, productItem.description) }} className="flex ml-2 md:ml-4 text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">Add to Cart</button>
+                <button onClick={handleBuyNow} className="flex ml-2 md:ml-4 text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">Buy now</button>
+                <button onClick={()=>{addToCart(slug,1,productItem.price,productItem.title,productItem.description,productItem.availableQty)}} className="flex ml-2 md:ml-4 text-white bg-pink-500 border-0 py-2 px-6 focus:outline-none hover:bg-pink-600 rounded">Add to Cart</button>
               </div>
               <div className='flex my-5'>
                 <input className='border-2 rounded-md px-2 w-40 border-gray-400' placeholder='Enter pincode' onChange={onChange} value={pincode} type="number" />
@@ -110,9 +140,15 @@ const Slug = ({ addToCart, productItem }) => {
 export async function getServerSideProps(context) {
   connectdb();
   let slugItem = await Product.findOne({ slug: context.query.slug });
+  if(!slugItem){
+    let error = true
+    return {
+      props: { error },
+    }
+  }
   let productItem = JSON.parse(JSON.stringify(slugItem));
   return {
-    props: {productItem},
+    props: { productItem },
   }
 }
 

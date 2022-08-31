@@ -4,8 +4,19 @@
 
 body{
     overflow-x: hidden;
+    background: rgb(247, 247, 247);
 }
 
 .redDot{
     width: 20px
+}
+
+::-webkit-scrollbar{
+    width: 5px;
+}
+::-webkit-scrollbar-track{
+    background-color: #f1f1f1;
+}
+::-webkit-scrollbar-thumb{
+    background-color: rgb(177, 177, 177);
 }

@@ -5,10 +5,10 @@ import Link from 'next/link'
 const Login = () => {
   return (
    
-      <div className=" pb-16 pt-10 bg-gradient-to-r from-gray-500 to-gray-900 flex    ">
+      <div className=" h-[85vh] pb-16 pt-10 bg-gradient-to-r from-gray-500 to-gray-900 flex    ">
         <div className="p-10  mx-auto md:w-full md:max-w-md">
           <div className='mx-auto text-center'>
-          <Image className='rounded-full' src={'/logo.jpg'} height={80} width={80}></Image>
+          <Image className='rounded-full' alt='' src={'/logo.jpg'} height={80} width={80}></Image>
           <h5 className='my-5 text-xl text-white'>Reset password</h5>
           
           </div>

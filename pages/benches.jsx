@@ -1,7 +1,12 @@
-import React from 'react'
-import Link from 'next/link'
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import Product from '../models/product';
+import mongoose from 'mongoose';
 
-const Benches = () => {
+
+
+const Benches = ({ products }) => {
     return (
         <div className='benchesContainer'>
             <div className="heading ">
@@ -11,99 +16,40 @@ const Benches = () => {
             <section className="text-gray-600 body-font md:w-11/12 m-auto">
                 <div className="container px-5 py-24 mx-auto">
                     <div className="flex flex-wrap -m-4">
-                        <Link href={'/products/is-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">The Catalyzer</h2>
-                                <p className="mt-1">₹16.00</p>
-                            </div>
-                        </div>
-                        </Link>
-                        <Link href={'/products/this-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">Shooting Stars</h2>
-                                <p className="mt-1">₹21.15</p>
-                            </div>
-                        </div>
-                        </Link>
-                        <Link href={'/products/this-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">Neptune</h2>
-                                <p className="mt-1">₹12.00</p>
-                            </div>
-                        </div>
-                        </Link>
-                        <Link href={'/products/this-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">The 400 Blows</h2>
-                                <p className="mt-1">₹18.40</p>
-                            </div>
-                        </div>
-                        </Link>
-                        <Link href={'/products/this-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">The Catalyzer</h2>
-                                <p className="mt-1">₹16.00</p>
-                            </div>
-                        </div>
-                        </Link>
-                        <Link href={'/products/this-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">Shooting Stars</h2>
-                                <p className="mt-1">₹21.15</p>
-                            </div>
-                        </div>
-                        </Link>
-                        <Link href={'/products/this-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">Neptune</h2>
-                                <p className="mt-1">₹12.00</p>
-                            </div>
-                        </div>
-                        </Link>
-                        <Link href={'/products/this-is-products-id'}>
-                        <div className="lg:w-1/4 md:w-1/2 cursor-pointer p-4 w-full">
-                            <a className="block relative h-72 rounded overflow-hidden">
-                                <img alt="ecommerce" className="object-cover object-center w-full h-full block" src="/gymbench.jpg" />
-                            </a>
-                            <div className="mt-4">
-                                <h2 className="text-gray-900 title-font text-lg font-medium">The 400 Blows</h2>
-                                <p className="mt-1">₹18.40</p>
-                            </div>
-                        </div>
-                        </Link>
+
+                        {products.map((product) => {
+                            return <Link key={product.slug} href={`/products/${product.slug}`}>
+                                <div className="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                    <div className='border-2 bg-white shadow-xl'>
+                                        <a className="block relative h-72 rounded overflow-hidden">
+                                            <Image height={1000} width={1000} alt="ecommerce" className="object-cover object-center w-full h-full block" src={product.image} />
+                                        </a>
+                                        <div className="mt-4">
+
+                                            <h2 className="text-gray-900 title-font text-lg font-medium px-2">{product.title}</h2>
+                                            <p className="my-1 px-2">₹{product.price}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Link>
+                        })}
+
                     </div>
                 </div>
             </section>
         </div>
     )
+}
+
+export async function getServerSideProps(context) {
+    if (!mongoose.connections[0].readyState) {
+        await mongoose.connect(process.env.MONGO_URI)
+    }
+    let data = await Product.find({ category: "bench" })
+    let products = JSON.parse(JSON.stringify(data))
+    return {
+        props: { products }, // will be passed to the page component as props
+    }
 }
 
 export default Benches

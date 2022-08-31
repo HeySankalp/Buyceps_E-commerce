@@ -6,10 +6,10 @@ const productSchema = new mongoose.Schema({
     description: { type: String, required: true },
     image: { type: String, required: true },
     category: { type: String, required: true },
-    availableQty: { type: Number, required: true }
+    availableQty: { type: Number, required: true },
+    price: { type: Number, required: true }
 }, {
     timestamps: true
 })
 
-mongoose.models ={}
-export default mongoose.model("Product", productSchema);
+export default mongoose.models.Product || mongoose.model("Product", productSchema);

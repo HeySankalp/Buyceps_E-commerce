@@ -2,21 +2,23 @@ import Product from '../../models/product';
 import connectdb from '../../middleware/dbConection';
 
 
-const handler = async(req, res) => {
+const handler = async (req, res) => {
+    console.log(req.body);
     let newProduct
     if (req.method == 'POST') {
-        for (let i = 0; i < req.body.length; i++) {
-            newProduct = new Product({
-                slug: req.body[i].slug,
-                title: req.body[i].title,
-                description: req.body[i].description,
-                image: req.body[i].image,
-                category: req.body[i].category,
-                availableQty: req.body[i].availableQty
-            })
-            await newProduct.save()
-        }
-        res.status(200).json({success :"succesfully saved"});
+
+        console.log(req.body);
+        newProduct = new Product({
+            slug: req.body.slug,
+            title: req.body.title,
+            description: req.body.description,
+            image: req.body.image,
+            category: req.body.category,
+            availableQty: parseInt(req.body.availableQty),
+            price: parseInt(req.body.price)
+        })
+        await newProduct.save()
+        res.status(200).json({ status:true, success: "succesfully saved" });
     } else {
         res.status(400).json({ error: "bad request" })
     }

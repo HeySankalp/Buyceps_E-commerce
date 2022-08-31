@@ -1,11 +1,74 @@
-import React from 'react'
+import { React, useEffect } from 'react'
 import { BsBagCheckFill } from 'react-icons/bs';
 import { TbMoodEmpty } from 'react-icons/tb'
+import Head from 'next/head';
+import Script from 'next/script';
+import { useRouter } from 'next/router';
 
 const Checkout = ({ cart, subTotal }) => {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (Object.keys(cart).length==0) {
+      router.back()
+    };
+  },[cart])
+
+
+  //--------------------------- for now i don'have merchent key---------------------
+  // let payOnClick = async() => {
+  //   let oId = Math.floor(Math.random() * Date.now())
+  //   let data = { cart, subTotal, oId,email:"email" }
+  //   let a = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/pretransaction`, {
+  //     method: 'POST',
+  //     headers: {
+  //       'content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify(data)
+  //   });
+
+  //   let resTxnToken = await a.json();
+  //   let txnToken = resTxnToken.txnToken
+  //   console.log(txnToken);
+
+  //   var config = {
+  //     "root": "",
+  //     "flow": "DEFAULT",
+  //     "data": {
+  //       "orderId": oId, /* update order id */
+  //       "token": "", /* update token value */
+  //       "tokenType": txnToken,
+  //       "amount": subTotal/* update amount */
+  //     },
+  //     "handler": {
+  //       "notifyMerchant": function (eventName, data) {
+  //         console.log("notifyMerchant handler function called");
+  //         console.log("eventName => ", eventName);
+  //         console.log("data => ", data);
+  //       }
+  //     }
+  //   };
+
+  //  if (window.Paytm && window.Paytm.CheckoutJS) {
+  //     window.Paytm.CheckoutJS.onLoad(function excecuteAfterCompleteLoad() {
+  //     initialze configuration using init method 
+  //      window.Paytm.CheckoutJS.init(config).then(function onSuccess() {
+  //      after successfully updating configuration, invoke JS Checkout
+  //        window.Paytm.CheckoutJS.invoke();
+  //      }).catch(function onError(error) {
+  //         console.log("error => ", error);
+  //      });
+  //     });
+  //   }
+  //  }
+
   return (
     <div>
-      <h1 className='text-3xl font-bold text-center text-gray-600 my-10 '>Checkout</h1>
+      <Head>
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0" />
+      </Head>
+        <h1 className='text-3xl font-bold text-center text-gray-600 my-10 '>Checkout</h1>
       <div className="form md:mx-40  md:my-20">
         <h2 className='font-bold text-xl md:mx-10 my-10 mx-24'>1. Delivary details</h2>
         <div className='md:flex'>
@@ -73,10 +136,11 @@ const Checkout = ({ cart, subTotal }) => {
                 </li>
               })}
             </ol>
-            <div className="btngrp flex">
-              <button disabled={Object.keys(cart).length == 0 ? "true" : "false"} className="flex mx-2 my-2 text-white  bg-gray-600 border-0 py-2 px-2 focus:outline-none hover:bg-gray-800 rounded text-sm"><BsBagCheckFill className='my-auto mr-1' />{Object.keys(cart).length == 0 ? "Addsome" : `Pay ₹ ${subTotal}`}</button>
-            </div>
-
+            {
+              <div className="btngrp flex">
+                <button disabled={Object.keys(cart).length == 0} className="flex mx-2 my-2 text-white  bg-gray-600 border-0 py-2 px-2 focus:outline-none hover:bg-gray-800 rounded text-sm"><BsBagCheckFill className='my-auto mr-1' />{Object.keys(cart).length == 0 ? "Addsome" : `Pay ₹ ${subTotal}`}</button>
+              </div>
+            }
           </div>
         </div>
 

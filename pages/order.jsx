@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const Order = () => {
   return (
@@ -40,7 +41,9 @@ const Order = () => {
                 <button className="flex ml-auto text-white bg-gray-600 border-0 py-2 px-6 focus:outline-none hover:bg-gray-800 rounded">Track order</button>
               </div>
             </div>
-            <img alt="ecommerce" className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src="https://dummyimage.com/400x400" />
+            <div className='lg:w-1/2 w-full lg:h-auto h-64'>
+            <Image alt="ecommerce" width={1000} height={1000} className=" object-cover object-center rounded" src="https://dummyimage.com/400x400" />
+            </div>
           </div>
         </div>
       </section>
